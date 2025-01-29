@@ -1,5 +1,8 @@
+import "../lib/styles/globals.css";
+
+import Link from "next/link";
+
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,6 +25,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* <nav>
+          <Link href="/appointments">📅 קביעת תורים</Link> |
+          <Link href="/admin">🔧 ניהול תורים</Link>
+        </nav> */}
         {children}
       </body>
     </html>
