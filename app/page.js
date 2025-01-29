@@ -1,12 +1,14 @@
-import { cache } from "react";
+import Link from "next/link";
 
-const getTime = cache(async () => {
-  return new Date().toLocaleTimeString();
-});
-
-export default async function Home() {
-  const time = await getTime();
-  return <h1>הזמן בזמן בנייה (SSG): {time}</h1>;
+export default function Layout({ children }) {
+  return (
+    <div>
+      <nav>
+        <Link href="/appointments">📅 קביעת תורים</Link> |
+        <Link href="/admin">🔧 ניהול תורים</Link>
+      </nav>
+      <hr />
+      {children}
+    </div>
+  );
 }
-
-export const dynamic = "force-static"; // גורם ל-SSG – נתונים לא יתעדכנו ברענון

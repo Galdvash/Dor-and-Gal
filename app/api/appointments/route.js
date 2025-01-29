@@ -1,28 +1,45 @@
 let appointments = [
   { id: 1, time: "10:00", status: "available" },
-  { id: 2, time: "11:00", status: "booked" },
+  { id: 2, time: "11:00", status: "available" },
   { id: 3, time: "12:00", status: "available" },
 ];
 
-// GET – החזרת רשימת התורים
+// שליפת התורים
 export async function GET() {
   return Response.json(appointments);
 }
 
-// PATCH – קביעת תור
+// קביעת תור ועדכון בזמן אמת
 export async function PATCH(request) {
   const { id } = await request.json();
-
-  // חיפוש התור המתאים
   const appointment = appointments.find((appt) => appt.id === id);
 
   if (!appointment || appointment.status !== "available") {
-    return new Response(JSON.stringify({ error: "התור לא פנוי" }), {
+    return new Response(JSON.stringify({ error: "התור כבר נתפס" }), {
       status: 400,
     });
   }
 
-  appointment.status = "booked"; // שינוי סטטוס התור
+  appointment.status = "booked";
+
+  if (global.io) {
+    global.io.emit("appointmentUpdated", appointments);
+  }
 
   return Response.json({ success: true, appointment });
+}
+
+// איפוס כל התורים
+export async function DELETE() {
+  appointments = [
+    { id: 1, time: "10:00", status: "available" },
+    { id: 2, time: "11:00", status: "available" },
+    { id: 3, time: "12:00", status: "available" },
+  ];
+
+  if (global.io) {
+    global.io.emit("appointmentUpdated", appointments);
+  }
+
+  return Response.json({ success: true, message: "המערכת אופסה!" });
 }
